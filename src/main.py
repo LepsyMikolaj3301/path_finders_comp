@@ -1,5 +1,5 @@
 import pygame
-import math
+# import math
 from queue import PriorityQueue
 from functools import wraps
 import time
@@ -7,6 +7,9 @@ import heapq
 import os
 import copy
 from additional_functions import *
+
+
+# STAŁE
 CLOCK = pygame.time.Clock()
 FPS = 60
 PA_WIDTH = 600
@@ -16,6 +19,7 @@ UI_WIDTH = 400
 
 pygame.init()
 
+# stwoszenie okna pygame
 WIN = pygame.display.set_mode((PA_WIDTH + UI_WIDTH, PA_WIDTH))
 pygame.display.set_caption("Path algos - comparison")
 
@@ -36,6 +40,10 @@ TURQUOISE = (64, 224, 208)
 
 
 class Spot:
+    """
+    Klasa Spot - czyli Node na mapie
+    posiada właściwości i zmianę koloru    
+    """
     def __init__(self, row, col, width, total_rows):
         self.row = row
         self.col = col
@@ -114,9 +122,11 @@ class Spot:
 
     # implement new logic!!!
     def draw(self, win):
+        """Funkcja rysująca dany Node"""
         pygame.draw.rect(win, self.color, (self.x, self.y, self.width, self.width))
     
     def update_neighbours(self, grid):
+        """Metoda która znajduje swoich sąsiadów (Manhattan)"""
         self.neighbours = []
         if self.row < self.total_rows - 1 and not grid[self.row + 1][self.col].is_barrier(): #DOWN
             self.neighbours.append(grid[self.row + 1][self.col])
@@ -136,6 +146,7 @@ class Spot:
 
 # Button
 class Button:
+    """Przyciski"""
     def __init__(self, x, y, rect_width, rect_height, color, text, callback) -> None:
         button_font = pygame.font.SysFont('Corbel', 35)
         self.raw_text = text
@@ -171,7 +182,6 @@ def timeit(func):
 
 
 def download_created_map():
-
 
     # LICZBA MAP - WYBIERAMY PRZEZ ZMIENNĄ W MAIN !!!
     # ZMIENNA GLOBALNA
@@ -315,6 +325,7 @@ def draw(win, grid, rows, width, buttons=[]):
 
 # ALGORITHMS
 def reconstruct_path(came_from, current, draw):
+    """funkcja która odbudowuje daną ścieżkę"""
     total_cost = 0
     while current in came_from:
         current = came_from[current]
@@ -428,6 +439,11 @@ def a_star(draw, grid, start, end):
     
 
 def main(win, width_PA):
+    """
+    GŁÓWNY CZŁON
+    tutaj tworzymy przyciski oraz wybieramy mapę
+    Dalej jest główna pętla z logiką
+    """
     # width PA - Playable Area
     
     global grid, ROWS, start, end, map_pick
